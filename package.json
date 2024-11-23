@@ -1,0 +1,12 @@
+{
+  "name": "@socketsupply/socket-conduit-rpc-example",
+  "version": "0.0.1",
+  "description": "An example for connecting to the Socket Runtime Conduit WebSocket Server for IPC RPC",
+  "main": "index.js",
+  "scripts": {
+    "test": ":"
+  },
+  "author": "Joseph Werle <joseph@socketsupply.co>",
+  "license": "MIT",
+  "devDependencies": {}
+}
