@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Conduit } from 'socket:internal/conduit'
+import { Conduit } from 'socket:conduit'
 import { Buffer } from 'socket:buffer'
 import { rand64 } from 'socket:crypto'
 

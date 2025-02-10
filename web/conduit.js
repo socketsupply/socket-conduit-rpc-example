@@ -1,15 +1,18 @@
+const decoder = new TextDecoder()
+const encoder = new TextEncoder()
+
 export function id () {
   return globalThis.crypto.getRandomValues(new Uint32Array(1))[0]
 }
 
 /**
- * @param {{ origin: string | URL }} options
+ * @param {{ origin: string | URL, key: string }} options
  * @param {(function(Error|null):any)?} [callback]
  * @return {WebSocket & { id: number }}
  */
 export function connect (options, callback = null) {
   const socketId = id()
-  const url = new URL(`/${socketId}/0`, options.origin)
+  const url = new URL(`/${socketId}/0?key=${options.key}`, options.origin)
   const socket = Object.assign(new WebSocket(url.href), {
     id: socketId
   })
@@ -23,16 +26,16 @@ export function connect (options, callback = null) {
 }
 
 /**
- * @see {@link https://github.com/socketsupply/socket/blob/master/api/internal/conduit.js}
+ * @see {@link https://github.com/socketsupply/socket/blob/master/api/conduit.js}
  * @param {string} key
  * @param {string} value
  * @return {Uint8Array}
  */
 export function encodeOption (key, value) {
   const keyLength = key.length
-  const keyBuffer = new TextEncoder().encode(key)
+  const keyBuffer = encoder.encode(key)
 
-  const valueBuffer = new TextEncoder().encode(value)
+  const valueBuffer = encoder.encode(value)
   const valueLength = valueBuffer.length
 
   const buffer = new ArrayBuffer(1 + keyLength + 2 + valueLength)
@@ -93,7 +96,7 @@ export function decodeMessage (data) {
     const keyLength = view.getUint8(offset)
     offset += 1
 
-    const key = new TextDecoder().decode(new Uint8Array(data.buffer, offset, keyLength))
+    const key = decoder.decode(new Uint8Array(data.buffer, offset, keyLength))
     offset += key.length
 
     const valueLength = view.getUint16(offset, false)
@@ -102,7 +105,7 @@ export function decodeMessage (data) {
     const valueBuffer = new Uint8Array(data.buffer, offset, valueLength)
     offset += valueLength
 
-    const value = new TextDecoder().decode(valueBuffer)
+    const value = decoder.decode(valueBuffer)
     options[key] = value
   }
 

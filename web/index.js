@@ -1,7 +1,7 @@
 import conduit from './conduit.js'
 
 const decoder = new TextDecoder()
-const socket = conduit.connect({ origin: 'ws://localhost:8080' }, async (err) => {
+const socket = conduit.connect({ origin: 'ws://localhost:8080', key: 'hello world' }, async (err) => {
   if (err) {
     return globalThis.reportError(err)
   }
